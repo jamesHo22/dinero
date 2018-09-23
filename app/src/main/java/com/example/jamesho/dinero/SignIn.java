@@ -1,6 +1,7 @@
 package com.example.jamesho.dinero;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +32,24 @@ public class SignIn extends AppCompatActivity {
 
     private void updateUI(GoogleSignInAccount account) {
         TextView signedIn = findViewById(R.id.sign_in_status);
+        TextView userInfo = findViewById(R.id.user_info);
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+            userInfo.setText(personName + " " +
+                    personGivenName + " " +
+                    personFamilyName + " " +
+                    personEmail + " " +
+                    personId + " " +
+                    personPhoto);
+        }
         signedIn.setText("You are now signed in!");
+
         // this activity will open up the MainActivity so the user only needs to sign in once.
     }
 
