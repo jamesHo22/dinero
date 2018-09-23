@@ -2,6 +2,7 @@ package com.example.jamesho.dinero;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class SignIn extends AppCompatActivity {
@@ -20,6 +22,8 @@ public class SignIn extends AppCompatActivity {
     // the requestCode for the startActivityForResult in the google sign in OnClick
     static final int RC_SIGN_IN = 1;
     private final String TAG = SignIn.class.getName();
+    static final int SIGN_IN = 0;
+    static final int SIGN_OUT = 2;
 
     @Override
     protected void onStart() {
@@ -27,28 +31,36 @@ public class SignIn extends AppCompatActivity {
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
+        updateUI(SIGN_IN);
     }
 
-    private void updateUI(GoogleSignInAccount account) {
+    private void updateUI(int signInOrOut) {
         TextView signedIn = findViewById(R.id.sign_in_status);
         TextView userInfo = findViewById(R.id.user_info);
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
-            userInfo.setText(personName + " " +
-                    personGivenName + " " +
-                    personFamilyName + " " +
-                    personEmail + " " +
-                    personId + " " +
-                    personPhoto);
+
+        switch (signInOrOut) {
+            case SIGN_IN:
+                GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+                if (acct != null) {
+                    String personName = acct.getDisplayName();
+                    String personGivenName = acct.getGivenName();
+                    String personFamilyName = acct.getFamilyName();
+                    String personEmail = acct.getEmail();
+                    String personId = acct.getId();
+                    Uri personPhoto = acct.getPhotoUrl();
+                    userInfo.setText(personName + " " +
+                            personGivenName + " " +
+                            personFamilyName + " " +
+                            personEmail + " " +
+                            personId + " " +
+                            personPhoto);
+                }
+                signedIn.setText("You are now signed in!");
+                break;
+            case SIGN_OUT:
+                signedIn.setText("You have signed out");
+                userInfo.setText("");
         }
-        signedIn.setText("You are now signed in!");
 
         // this activity will open up the MainActivity so the user only needs to sign in once.
     }
@@ -77,6 +89,19 @@ public class SignIn extends AppCompatActivity {
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
+
+        //Sign out button
+        findViewById(R.id.sign_out_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        updateUI(SIGN_OUT);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -96,12 +121,12 @@ public class SignIn extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            updateUI(account);
+            updateUI(SIGN_IN);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
+            updateUI(SIGN_OUT);
         }
     }
 }
