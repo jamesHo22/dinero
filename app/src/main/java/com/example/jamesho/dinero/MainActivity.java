@@ -31,8 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
     DrawerLayout mDrawerLayout;
 
-    //TODO: put a recycler view in here that loads cardViews.
+    //TODO: (Completed) put a recycler view in here that loads cardViews.
     //TODO: (Completed) make a side panel where a user can access the sign out option
+    //TODO: Read from a local database and populate the card views
+    //TODO: Add click and swipe features to the card views
 
 
     @Override
