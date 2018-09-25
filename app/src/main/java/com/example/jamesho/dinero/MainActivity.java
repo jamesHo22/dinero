@@ -7,6 +7,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +23,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
+
+    // Recycler View Things
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     DrawerLayout mDrawerLayout;
 
@@ -55,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        //Get a reference to the recycler view on the main activity layout
+        mRecyclerView = findViewById(R.id.rv__show_menu_items);
+        // Initialize the layout manager for the item recycler view
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        // specify an adapter
+        mAdapter = new ItemAdapter(getApplicationContext());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     // A method that instantiates a googleSignIn Object to allow the user to sign out

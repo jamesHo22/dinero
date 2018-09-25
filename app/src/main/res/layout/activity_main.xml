@@ -27,6 +27,13 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/signed_in_as"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rv__show_menu_items">
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
     </FrameLayout>
