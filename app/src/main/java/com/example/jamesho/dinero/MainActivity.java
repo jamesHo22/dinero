@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     //TODO: (Completed) put a recycler view in here that loads cardViews.
     //TODO: (Completed) make a side panel where a user can access the sign out option
     //TODO: Read from a local database and populate the card views
-    //TODO: Add click and swipe features to the card views
+    //TODO: (Completed) Add click and swipe features to the card views
 
 
     @Override
@@ -75,12 +75,8 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new ItemAdapter(getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
 
-        //Add the swiping cards functionality
-        new ItemTouchHelper(new ItemTouchHelper.Callback() {
-            @Override
-            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                return 0;
-            }
+        //Add the swiping cards functionality using the simple callback
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -90,9 +86,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
+                // Do something when the item is swiped
+                // Right now it will show a toast saying which direction you swiped.
+                String mDirection;
+                if (direction==ItemTouchHelper.RIGHT) {
+                    mDirection = "right";
+                } else {
+                    mDirection = "left";
+                }
+                Toast.makeText(getApplicationContext(), "You swiped " + mDirection, Toast.LENGTH_SHORT).show();
             }
-        });
+        }).attachToRecyclerView(mRecyclerView);
     }
 
     // A method that instantiates a googleSignIn Object to allow the user to sign out
