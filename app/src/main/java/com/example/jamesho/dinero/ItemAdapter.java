@@ -3,6 +3,8 @@ package com.example.jamesho.dinero;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,7 @@ import org.w3c.dom.Text;
  * Created by jamesho on 2018-09-24.
  */
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
     // This specifies the number of cards
     private int numberOfCards = 10;
@@ -23,13 +25,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     // Provide a reference to the views for each item
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder implements RecyclerView.OnClickListener {
         //public TextView mTextView;
         TextView titleTv;
         public ItemViewHolder(View itemView) {
             super(itemView);
             //This references the textView on the card
             titleTv = itemView.findViewById(R.id.info_text);
+        }
+
+        @Override
+        public void onClick(View v) {
+
         }
     }
     @NonNull
