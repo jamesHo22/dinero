@@ -1,23 +1,18 @@
 package com.example.jamesho.dinero;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -54,17 +49,26 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
+        // Handles actions when sign-out is clicked
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.sign_out:
+                        // sign out
+                        signOut();
+                        break;
+                    case R.id.add_fake_data:
+                        // TODO: make then call method in Database directory to make and populate data
+                        // Live data wrapper around the data should automatically update the UI
+                }
                 // close drawer when item is tapped
                 mDrawerLayout.closeDrawers();
-                // sign out
-                signOut();
                 return true;
             }
         });
+
 
         //Get a reference to the recycler view on the main activity layout
         mRecyclerView = findViewById(R.id.rv__show_menu_items);
