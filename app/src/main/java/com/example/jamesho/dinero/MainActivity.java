@@ -1,29 +1,39 @@
 package com.example.jamesho.dinero;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jamesho.dinero.Database.AppDatabase;
+import com.example.jamesho.dinero.Database.ItemEntry;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     // Recycler View Things
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private ItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private AppDatabase mDb;
 
     DrawerLayout mDrawerLayout;
 
@@ -61,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.add_fake_data:
                         // TODO: make then call method in Database directory to make and populate data
+                        ItemEntry itemEntry = new ItemEntry(0, 0, "Main Course",
+                                "The Big Mac consists of two 1.6 oz (45.4 g) beef patties, special sauce (a variant of Thousand Island dressing), iceberg lettuce, American cheese, pickles, and onions, served in a three-part sesame seed bun.",
+                                "Big Mac",
+                                "$3.99");
+                        Log.v("Database", "test item added");
+                        mDb.ItemDao().insertItem(itemEntry);
                         // Live data wrapper around the data should automatically update the UI
                 }
                 // close drawer when item is tapped
@@ -69,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        // Get reference to the ROOM Database by creating a db instance
+        mDb = AppDatabase.getInstance(getApplicationContext());
         //Get a reference to the recycler view on the main activity layout
         mRecyclerView = findViewById(R.id.rv__show_menu_items);
         // Initialize the layout manager for the item recycler view
@@ -77,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         // specify an adapter
         mAdapter = new ItemAdapter(getApplicationContext());
+
+        retrieveData();
         mRecyclerView.setAdapter(mAdapter);
 
         //Add the swiping cards functionality using the simple callback
@@ -95,12 +114,41 @@ public class MainActivity extends AppCompatActivity {
                 String mDirection;
                 if (direction==ItemTouchHelper.RIGHT) {
                     mDirection = "right";
+                    int position = viewHolder.getAdapterPosition();
+                    List<ItemEntry> items = mAdapter.getItems();
+                    mDb.ItemDao().deleteItem(items.get(position));
+                    mAdapter.notifyItemRemoved(position);
                 } else {
                     mDirection = "left";
                 }
                 Toast.makeText(getApplicationContext(), "You swiped " + mDirection, Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(mRecyclerView);
+
+        // Get reference to the ROOM Database by creating a db instance
+        mDb = AppDatabase.getInstance(getApplicationContext());
+
+    }
+    /**
+     * This method retrieves a live data object from the local database.
+     * An observer is set on it to monitor changes and update the recycler view.
+     */
+    public void retrieveData() {
+        // retrieving items from database
+        Log.v("LiveData", "Actively retrieving data from database");
+        final LiveData<List<ItemEntry>> items = mDb.ItemDao().loadAllItems();
+        items.observe(this, new Observer<List<ItemEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<ItemEntry> itemEntries) {
+                if (itemEntries.isEmpty()) {
+                    mRecyclerView.setVisibility(View.GONE);
+                    Log.v("Database", "The database is empty");
+                } else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mAdapter.setItems(itemEntries);
+                }
+            }
+        });
     }
 
     // A method that instantiates a googleSignIn Object to allow the user to sign out

@@ -1,5 +1,6 @@
 package com.example.jamesho.dinero.Database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -15,7 +16,7 @@ import java.util.List;
 @Dao
 public interface ItemDao {
     @Query("SELECT * FROM ItemsTable ORDER BY id")
-    List<ItemEntry> loadAllItems();
+    LiveData<List<ItemEntry>> loadAllItems();
 
     @Insert
     void insertItem(ItemEntry itemEntry);
@@ -24,6 +25,9 @@ public interface ItemDao {
     void updateitem(ItemEntry itemEntry);
 
     @Delete
-    void deleteTask(ItemEntry itemEntry);
+    void deleteItem(ItemEntry itemEntry);
+
+    @Query("SELECT * FROM ItemsTable WHERE id = :id")
+    LiveData<List<ItemEntry>> loadItemById(int id);
 
 }
