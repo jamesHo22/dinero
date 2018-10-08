@@ -3,6 +3,7 @@ package com.example.jamesho.dinero;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,12 +21,16 @@ import android.widget.Toast;
 
 import com.example.jamesho.dinero.Database.AppDatabase;
 import com.example.jamesho.dinero.Database.ItemEntry;
+import com.example.jamesho.dinero.Network.NetworkUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemAdapterOnClickHandler {
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
 
     //TODO: (Completed) put a recycler view in here that loads cardViews.
     //TODO: (Completed) make a side panel where a user can access the sign out option
-    //TODO: Read from a local database and populate the card views
+    //TODO: (Completed) Read from a local database and populate the card views
     //TODO: (Completed) Add click and swipe features to the card views
 
 
@@ -178,5 +183,26 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
                 finish();
             }
         });
+    }
+
+    /**
+     * A temporary class for calling server in background
+     */
+    private class callServerTask extends AsyncTask<Integer, Integer, String> {
+        @Override
+        protected String doInBackground(Integer... integers) {
+            // Declare null variables
+            URL builtUri = null;
+            HttpURLConnection urlConnection = null;
+            // Assign variables to stuff
+            builtUri = NetworkUtils.buildUrl(integers[0]);
+            //FIXME: the builtURI is built everytime the asynctask is called.
+            try {
+                urlConnection = (HttpURLConnection) builtUri.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
