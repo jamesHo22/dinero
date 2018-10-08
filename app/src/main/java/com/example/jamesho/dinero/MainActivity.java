@@ -2,6 +2,7 @@ package com.example.jamesho.dinero;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,13 +28,14 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemAdapterOnClickHandler {
 
     // Recycler View Things
     private RecyclerView mRecyclerView;
     private ItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private AppDatabase mDb;
+    private Toast mToast;
 
     DrawerLayout mDrawerLayout;
 
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         // specify an adapter
-        mAdapter = new ItemAdapter(getApplicationContext());
+        mAdapter = new ItemAdapter(this);
 
         retrieveData();
         mRecyclerView.setAdapter(mAdapter);
@@ -129,6 +131,18 @@ public class MainActivity extends AppCompatActivity {
         mDb = AppDatabase.getInstance(getApplicationContext());
 
     }
+
+    @Override
+    public void onClick(String testItem) {
+        Context context = this;
+        if (mToast != null) {
+            mToast.cancel();
+        }
+
+        mToast = Toast.makeText(context, testItem, Toast.LENGTH_SHORT);
+        mToast.show();
+    }
+
     /**
      * This method retrieves a live data object from the local database.
      * An observer is set on it to monitor changes and update the recycler view.

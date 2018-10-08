@@ -22,15 +22,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     private List<ItemEntry> mItemEntries;
 
-    public ItemAdapter(Context context) {
+    public ItemAdapter(ItemAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
     }
 
+    private final ItemAdapterOnClickHandler mClickHandler;
     // define an interface for handling onClickViews
-    interface ItemAdapterOnClickHandler {
-        void getString(String string);
+
+    public interface ItemAdapterOnClickHandler {
+        void onClick(String testItem);
     }
+
     // Provide a reference to the views for each item
-    public static class ItemViewHolder extends RecyclerView.ViewHolder implements RecyclerView.OnClickListener {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements RecyclerView.OnClickListener {
         //public TextView mTextView;
         TextView titleTv;
         TextView cardNumberTv;
@@ -41,12 +45,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             titleTv = itemView.findViewById(R.id.info_text);
             cardNumberTv = itemView.findViewById(R.id.card_number);
             mainIV = itemView.findViewById(R.id.main_image_view);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Log.v("Clicks", String.valueOf(getAdapterPosition()));
-
+            int adapterPosition = getAdapterPosition();
+            String testItem = "Clicked on item ";
+            mClickHandler.onClick(testItem + String.valueOf(adapterPosition));
         }
     }
     @Override
