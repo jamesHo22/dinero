@@ -22,11 +22,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     private List<ItemEntry> mItemEntries;
 
-    public ItemAdapter(ItemAdapterOnClickHandler onClickHandler) {
-        mClickHandler = onClickHandler;
+    public ItemAdapter(Context context) {
     }
-
-    ItemAdapterOnClickHandler mClickHandler;
 
     // define an interface for handling onClickViews
     interface ItemAdapterOnClickHandler {
@@ -49,6 +46,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         @Override
         public void onClick(View v) {
             Log.v("Clicks", String.valueOf(getAdapterPosition()));
+
         }
     }
     @Override
