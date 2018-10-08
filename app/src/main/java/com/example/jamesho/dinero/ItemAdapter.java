@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jamesho.dinero.Database.ItemEntry;
@@ -21,24 +22,33 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     private List<ItemEntry> mItemEntries;
 
-    public ItemAdapter(Context context) {
+    public ItemAdapter(ItemAdapterOnClickHandler onClickHandler) {
+        mClickHandler = onClickHandler;
     }
 
+    ItemAdapterOnClickHandler mClickHandler;
+
+    // define an interface for handling onClickViews
+    interface ItemAdapterOnClickHandler {
+        void getString(String string);
+    }
     // Provide a reference to the views for each item
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements RecyclerView.OnClickListener {
         //public TextView mTextView;
         TextView titleTv;
         TextView cardNumberTv;
+        ImageView mainIV;
         public ItemViewHolder(View itemView) {
             super(itemView);
             //This references the textView on the card
             titleTv = itemView.findViewById(R.id.info_text);
             cardNumberTv = itemView.findViewById(R.id.card_number);
+            mainIV = itemView.findViewById(R.id.main_image_view);
         }
 
         @Override
         public void onClick(View v) {
-
+            Log.v("Clicks", String.valueOf(getAdapterPosition()));
         }
     }
     @Override
@@ -58,6 +68,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(@NonNull ItemAdapter.ItemViewHolder holder, int position) {
         holder.titleTv.setText(mItemEntries.get(position).getName());
         holder.cardNumberTv.setText(String.valueOf(position));
+        holder.mainIV.setImageResource(R.mipmap.big_mac);
     }
     // Return the size of your dataset (invoked by the layout manager)
     @Override
