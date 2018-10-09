@@ -39,12 +39,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         TextView titleTv;
         TextView cardNumberTv;
         ImageView mainIV;
+        TextView descriptionTv;
+
         public ItemViewHolder(View itemView) {
             super(itemView);
             //This references the textView on the card
             titleTv = itemView.findViewById(R.id.info_text);
             cardNumberTv = itemView.findViewById(R.id.card_number);
             mainIV = itemView.findViewById(R.id.main_image_view);
+            descriptionTv = itemView.findViewById(R.id.description);
             itemView.setOnClickListener(this);
         }
 
@@ -73,6 +76,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.titleTv.setText(mItemEntries.get(position).getName());
         holder.cardNumberTv.setText(String.valueOf(position));
         holder.mainIV.setImageResource(R.mipmap.big_mac);
+        holder.descriptionTv.setText(mItemEntries.get(position).getDescription());
     }
     // Return the size of your dataset (invoked by the layout manager)
     @Override

@@ -146,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
 
         mToast = Toast.makeText(context, testItem, Toast.LENGTH_SHORT);
         mToast.show();
+        callServerTask callServerTask = new callServerTask();
+        callServerTask.execute(1);
     }
 
     /**
@@ -199,6 +201,11 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
             //FIXME: the builtURI is built everytime the asynctask is called.
             try {
                 urlConnection = (HttpURLConnection) builtUri.openConnection();
+                String response = NetworkUtils.getResponseFromHTTPUrl(urlConnection);
+                Log.v("Background ", response);
+                // Make a new ItemEntry and put it in database
+                ItemEntry testResponse = new ItemEntry(1,1,"Test", response, "Test", "Test");
+                mDb.ItemDao().insertItem(testResponse);
             } catch (IOException e) {
                 e.printStackTrace();
             }

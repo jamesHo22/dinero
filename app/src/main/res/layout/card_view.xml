@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="4dp"
         app:cardCornerRadius="4dp">
@@ -37,6 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:fontFamily="sans-serif-light"
                     android:padding="4dp"
                     android:text="@string/_1"
                     android:textSize="18sp"/>
@@ -45,7 +46,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="140dp"
                 android:id="@+id/main_image_view"
                 android:src="@mipmap/big_mac"
                 android:scaleType="centerCrop"

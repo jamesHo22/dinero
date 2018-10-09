@@ -19,8 +19,9 @@ import java.net.URLDecoder;
 
 public class NetworkUtils {
 
-    final static String BASE_AUTHORITY_SERVER = "";
-    final static String PATH_TEST = "";
+    final static String BASE_AUTHORITY_SERVER = "baconipsum.com";
+    //https://baconipsum.com/api/?type=meat-and-filler&paras=1
+    final static String PATH_TEST = "api/";
     final static String PATH_USER_LOGIN = "";
 
     /***
@@ -53,9 +54,11 @@ public class NetworkUtils {
         } else {
             // the get data endpoint
             Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http")
+            builder.scheme("https")
                     .authority(BASE_AUTHORITY_SERVER)
-                    .appendPath(PATH_TEST);
+                    .appendPath(PATH_TEST)
+                    .appendQueryParameter("type", "meat-and-filler")
+                    .appendQueryParameter("sentences", "3");
             String myUrl = builder.build().toString();
             URL builtUrl = null;
             try {
