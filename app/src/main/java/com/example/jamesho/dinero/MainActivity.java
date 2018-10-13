@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.example.jamesho.dinero.Database.AppDatabase;
 import com.example.jamesho.dinero.Database.ItemEntry;
-import com.example.jamesho.dinero.Network.NetworkUtils;
+import com.example.jamesho.dinero.sync.NetworkUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
     //TODO: (Completed) make a side panel where a user can access the sign out option
     //TODO: (Completed) Read from a local database and populate the card views
     //TODO: (Completed) Add click and swipe features to the card views
+    //TODO: Make an IntentService for database operations, JSON Parsing, Network Calling
+    //TODO: Make Location Manager thing to trigger syncing service when phone moves
 
 
     @Override
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
                         signOut();
                         break;
                     case R.id.add_fake_data:
-                        // TODO: make then call method in Database directory to make and populate data
+                        // TODO: make the call method in Database directory to make and populate data
                         ItemEntry itemEntry = new ItemEntry(0, 0, "Main Course",
                                 "The Big Mac consists of two 1.6 oz (45.4 g) beef patties, special sauce (a variant of Thousand Island dressing), iceberg lettuce, American cheese, pickles, and onions, served in a three-part sesame seed bun.",
                                 "Big Mac",
@@ -189,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
 
     /**
      * A temporary class for calling server in background
+     * TODO: put this into a service
      */
     private class callServerTask extends AsyncTask<Integer, Integer, String> {
         @Override
@@ -198,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
             HttpURLConnection urlConnection = null;
             // Assign variables to stuff
             builtUri = NetworkUtils.buildUrl(integers[0]);
-            //FIXME: the builtURI is built everytime the asynctask is called.
+            //FIXME: the builtURI is built everytime the asynctask is called. Only build it if its a new URI
             try {
                 urlConnection = (HttpURLConnection) builtUri.openConnection();
                 String response = NetworkUtils.getResponseFromHTTPUrl(urlConnection);

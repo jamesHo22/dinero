@@ -1,4 +1,4 @@
-package com.example.jamesho.dinero.Network;
+package com.example.jamesho.dinero.sync;
 
 import android.net.Uri;
 import android.util.Log;
@@ -30,7 +30,7 @@ public class NetworkUtils {
      * @return returns a URL object
      */
     public static URL buildUrl(int type) {
-        // TODO: Change this to a switch case to change between endpoints
+        // FIXME: Change this to a switch case to change between endpoints
         if (type == 0) {
             // The user login endpoint
             Uri.Builder builder = new Uri.Builder();
