@@ -26,6 +26,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <service android:name=".sync.CallServerIntentService" android:enabled="true"/>
     </application>
 
 </manifest>

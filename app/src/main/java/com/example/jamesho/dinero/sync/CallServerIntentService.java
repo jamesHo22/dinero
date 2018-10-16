@@ -15,5 +15,7 @@ public class CallServerIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         String action = intent.getAction();
+        //TODO: add authcode
+        CallServerTasks.executeTask(this, action, "");
     }
 }

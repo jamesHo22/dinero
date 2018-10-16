@@ -3,6 +3,7 @@ package com.example.jamesho.dinero;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.jamesho.dinero.Database.AppDatabase;
 import com.example.jamesho.dinero.Database.ItemEntry;
+import com.example.jamesho.dinero.sync.CallServerIntentService;
+import com.example.jamesho.dinero.sync.CallServerTasks;
 import com.example.jamesho.dinero.sync.NetworkUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -137,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         // Get reference to the ROOM Database by creating a db instance
         mDb = AppDatabase.getInstance(getApplicationContext());
 
+
     }
 
     @Override
@@ -145,11 +149,11 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         if (mToast != null) {
             mToast.cancel();
         }
-
+        final Intent callServerIntent = new Intent(this, CallServerIntentService.class);
+        callServerIntent.setAction(CallServerTasks.ACTION_CALL_SERVER);
+        startService(callServerIntent);
         mToast = Toast.makeText(context, testItem, Toast.LENGTH_SHORT);
         mToast.show();
-        callServerTask callServerTask = new callServerTask();
-        callServerTask.execute(1);
     }
 
     /**
