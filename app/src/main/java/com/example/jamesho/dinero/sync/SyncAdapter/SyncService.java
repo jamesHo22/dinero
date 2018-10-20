@@ -1,4 +1,4 @@
-package com.example.jamesho.dinero.sync;
+package com.example.jamesho.dinero.sync.SyncAdapter;
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,9 +8,7 @@ import android.util.Log;
 
 /**
  * Created by jamesho on 2018-10-19.
- */
-
-/**
+ * This service allows Android to find the SyncAdapter
  * Define a service that returns a IBinder for the sync adapter class, allowing the sync adapter framework to call onPerformSync().
  */
 public class SyncService extends Service {

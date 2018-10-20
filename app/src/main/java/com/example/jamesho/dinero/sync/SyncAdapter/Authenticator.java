@@ -1,4 +1,4 @@
-package com.example.jamesho.dinero.sync;
+package com.example.jamesho.dinero.sync.SyncAdapter;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;

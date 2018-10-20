@@ -1,4 +1,4 @@
-package com.example.jamesho.dinero.sync;
+package com.example.jamesho.dinero.sync.SyncAdapter;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -7,6 +7,7 @@ import android.net.Uri;
 
 /**
  * Created by jamesho on 2018-10-19.
+ * This class is a ContentProvider that only exists to allow the sync adapter to function
  */
 
 public class StubProvider extends ContentProvider {

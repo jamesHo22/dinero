@@ -150,32 +150,11 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         // Get reference to the ROOM Database by creating a db instance
         mDb = AppDatabase.getInstance(getApplicationContext());
 
-        // Create the dummy account that wil be used for the sync-adapter
-        //FIXME: mAccount isn't getting assigned to an account
+        // Access the accounts that are stored in the account manager
         AccountManager accountManager = (AccountManager) getApplicationContext().getSystemService(ACCOUNT_SERVICE);
         Account[] accounts = accountManager.getAccounts();
         Log.v("sync", accounts[0].toString());
         mAccount = accounts[0];
-        // Enable Sync
-        //ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
-        //Log.v("sync", mAccount.toString());
-
-    }
-
-    //FIXME: figure out what this has to return
-    public static Account CreateSyncAccount(Context context) {
-        // Create the account type and default account
-        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
-        // Get an instance of the Android account manager
-        AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
-        Account[] accounts = accountManager.getAccounts();
-
-        if (!accountManager.addAccountExplicitly(newAccount, null, null)) {
-            Log.v("Sync", "failed to create account");
-            return null;
-        }
-        Log.v("Sync", "new Account created");
-        return newAccount;
     }
 
     @Override
@@ -196,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         // Request the sync for the default account, authority and manual sync settings
         ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
-        Log.v("request", "sync");
     }
 
     /**

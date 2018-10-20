@@ -1,4 +1,4 @@
-package com.example.jamesho.dinero.sync;
+package com.example.jamesho.dinero.sync.SyncAdapter;
 
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
@@ -10,8 +10,6 @@ import android.util.Log;
 
 /**
  * Created by jamesho on 2018-10-19.
- */
-/**
  * This class handles the data transfer between a server and app using the Android sync adapter framework
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
