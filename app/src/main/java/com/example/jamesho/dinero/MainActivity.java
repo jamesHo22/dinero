@@ -1,11 +1,12 @@
 package com.example.jamesho.dinero;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,25 +26,21 @@ import com.example.jamesho.dinero.Database.AppDatabase;
 import com.example.jamesho.dinero.Database.ItemEntry;
 import com.example.jamesho.dinero.sync.CallServerIntentService;
 import com.example.jamesho.dinero.sync.CallServerTasks;
-import com.example.jamesho.dinero.sync.NetworkUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemAdapterOnClickHandler {
 
     // Constants
     // The authority for the sync adapter's content provider
-    public static final String AUTHORITY = "com.example.android.datasync.provider";
+    public static final String AUTHORITY = "com.example.jamesho.dinero.Database";
     // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "example.com";
+    public static final String ACCOUNT_TYPE = "dinero.com";
     // Account name
     public static final String ACCOUNT = "dummyaccount";
     Account mAccount;
@@ -54,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
     private RecyclerView.LayoutManager mLayoutManager;
     private AppDatabase mDb;
     private Toast mToast;
+
+    //Sync adapter required ContentResolver
+    ContentResolver resolver;
 
     DrawerLayout mDrawerLayout;
 
@@ -151,24 +151,26 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         mDb = AppDatabase.getInstance(getApplicationContext());
 
         // Create the dummy account that wil be used for the sync-adapter
-        mAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
-                //CreateSyncAccount(this);
+        mAccount = CreateSyncAccount(this);
+        // Enable Sync
+        ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
+
     }
 
     //FIXME: figure out what this has to return
-//    public static Account CreateSyncAccount(Context context) {
-//        // Create the account type and default account
-//        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
-//        // Get an instance of the Android account manager
-//        AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
-//
-//        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
-//
-//        } else {
-//
-//        }
-//
-//    }
+    public static Account CreateSyncAccount(Context context) {
+        // Create the account type and default account
+        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
+        // Get an instance of the Android account manager
+        AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
+
+        if (!accountManager.addAccountExplicitly(newAccount, null, null)) {
+            Log.v("Sync", "failed to create account");
+            return null;
+        }
+        Log.v("Sync", "new Account created");
+        return newAccount;
+    }
 
     @Override
     public void onClick(String testItem) {
@@ -181,6 +183,14 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         startService(callServerIntent);
         mToast = Toast.makeText(context, testItem, Toast.LENGTH_SHORT);
         mToast.show();
+
+        // Pass in the settings flags by inserting them in a bundle
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        // Request the sync for the default account, authority and manual sync settings
+        ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
+        Log.v("request", "sync");
     }
 
     /**
@@ -220,30 +230,6 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         });
     }
 
-    /**
-     * A temporary class for calling server in background
-     * TODO: put this into a service
-     */
-    private class callServerTask extends AsyncTask<Integer, Integer, String> {
-        @Override
-        protected String doInBackground(Integer... integers) {
-            // Declare null variables
-            URL builtUri = null;
-            HttpURLConnection urlConnection = null;
-            // Assign variables to stuff
-            builtUri = NetworkUtils.buildUrl(integers[0]);
-            //FIXME: the builtURI is built everytime the asynctask is called. Only build it if its a new URI
-            try {
-                urlConnection = (HttpURLConnection) builtUri.openConnection();
-                String response = NetworkUtils.getResponseFromHTTPUrl(urlConnection);
-                Log.v("Background ", response);
-                // Make a new ItemEntry and put it in database
-                ItemEntry testResponse = new ItemEntry(1,1,"Test", response, "Test", "Test");
-                mDb.ItemDao().insertItem(testResponse);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
+    // Run the sync adapter
+
 }

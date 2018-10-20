@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by jamesho on 2018-10-19.
@@ -17,6 +18,9 @@ public class SyncService extends Service {
     private static SyncAdapter sSyncAdapter = null;
     // Object to use as a thread-safe lock
     private static final Object sSyncAdatperLock = new Object();
+    public SyncService() {
+        super();
+    }
     /**
      * Instantiate the sync adapter object using the singleton pattern
      */
@@ -25,8 +29,9 @@ public class SyncService extends Service {
         super.onCreate();
         synchronized (sSyncAdapter) {
             if (sSyncAdapter == null) {
-                sSyncAdapter = new SyncAdapter(getApplicationContext(), true);
+                sSyncAdapter = new  SyncAdapter(getApplicationContext(), true);
             }
+            Log.v("SyncService", "SyncService created");
         }
     }
 
