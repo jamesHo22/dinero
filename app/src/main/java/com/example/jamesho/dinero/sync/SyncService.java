@@ -27,12 +27,12 @@ public class SyncService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        synchronized (sSyncAdapter) {
+
             if (sSyncAdapter == null) {
                 sSyncAdapter = new  SyncAdapter(getApplicationContext(), true);
             }
             Log.v("SyncService", "SyncService created");
-        }
+
     }
 
     @Nullable

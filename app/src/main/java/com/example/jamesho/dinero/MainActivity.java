@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
     // The authority for the sync adapter's content provider
     public static final String AUTHORITY = "com.example.jamesho.dinero.Database";
     // An account type, in the form of a domain name
-    public static final String ACCOUNT_TYPE = "dinero.com";
+    public static final String ACCOUNT_TYPE = "com.google";
     // Account name
     public static final String ACCOUNT = "dummyaccount";
     Account mAccount;
@@ -151,9 +151,14 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         mDb = AppDatabase.getInstance(getApplicationContext());
 
         // Create the dummy account that wil be used for the sync-adapter
-        mAccount = CreateSyncAccount(this);
+        //FIXME: mAccount isn't getting assigned to an account
+        AccountManager accountManager = (AccountManager) getApplicationContext().getSystemService(ACCOUNT_SERVICE);
+        Account[] accounts = accountManager.getAccounts();
+        Log.v("sync", accounts[0].toString());
+        mAccount = accounts[0];
         // Enable Sync
-        ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
+        //ContentResolver.setSyncAutomatically(mAccount, AUTHORITY, true);
+        //Log.v("sync", mAccount.toString());
 
     }
 
@@ -163,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
         // Get an instance of the Android account manager
         AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
+        Account[] accounts = accountManager.getAccounts();
 
         if (!accountManager.addAccountExplicitly(newAccount, null, null)) {
             Log.v("Sync", "failed to create account");
