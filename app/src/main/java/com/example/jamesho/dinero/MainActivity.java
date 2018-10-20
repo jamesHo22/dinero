@@ -1,5 +1,6 @@
 package com.example.jamesho.dinero;
 
+import android.accounts.Account;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
@@ -38,6 +39,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemAdapterOnClickHandler {
 
+    // Constants
+    // The authority for the sync adapter's content provider
+    public static final String AUTHORITY = "com.example.android.datasync.provider";
+    // An account type, in the form of a domain name
+    public static final String ACCOUNT_TYPE = "example.com";
+    // Account name
+    public static final String ACCOUNT = "dummyaccount";
+    Account mAccount;
+
     // Recycler View Things
     private RecyclerView mRecyclerView;
     private ItemAdapter mAdapter;
@@ -51,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
     //TODO: (Completed) make a side panel where a user can access the sign out option
     //TODO: (Completed) Read from a local database and populate the card views
     //TODO: (Completed) Add click and swipe features to the card views
-    //TODO: Make an IntentService for database operations, JSON Parsing, Network Calling
+    //TODO: (Completed) Make an IntentService for database operations, JSON Parsing, Network Calling
     //TODO: Make Location Manager thing to trigger syncing service when phone moves
 
 
@@ -140,8 +150,25 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         // Get reference to the ROOM Database by creating a db instance
         mDb = AppDatabase.getInstance(getApplicationContext());
 
-
+        // Create the dummy account that wil be used for the sync-adapter
+        mAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
+                //CreateSyncAccount(this);
     }
+
+    //FIXME: figure out what this has to return
+//    public static Account CreateSyncAccount(Context context) {
+//        // Create the account type and default account
+//        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
+//        // Get an instance of the Android account manager
+//        AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
+//
+//        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+//
+//        } else {
+//
+//        }
+//
+//    }
 
     @Override
     public void onClick(String testItem) {
