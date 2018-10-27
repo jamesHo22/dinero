@@ -167,13 +167,6 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         mToast = Toast.makeText(context, testItem, Toast.LENGTH_SHORT);
         mToast.show();
 
-//        // Pass in the settings flags by inserting them in a bundle
-//        Bundle settingsBundle = new Bundle();
-//        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-//        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-//        // Request the sync for the default account, authority and manual sync settings
-//        ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
-//        Log.v("Sync", "Clicked");
     }
 
     /**
