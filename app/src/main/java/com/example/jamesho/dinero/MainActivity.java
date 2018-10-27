@@ -2,7 +2,6 @@ package com.example.jamesho.dinero;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,24 +33,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemAdapterOnClickHandler {
 
-//    // Constants
-//    // The authority for the sync adapter's content provider
-//    public static final String AUTHORITY = "com.example.jamesho.dinero.Database";
-//    // An account type, in the form of a domain name
-//    public static final String ACCOUNT_TYPE = "com.google";
-//    // Account name
-//    public static final String ACCOUNT = "dummyaccount";
-//    Account mAccount;
-
     // Recycler View Things
     private RecyclerView mRecyclerView;
     private ItemAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private AppDatabase mDb;
     private Toast mToast;
-
-    //Sync adapter required ContentResolver
-    ContentResolver resolver;
 
     DrawerLayout mDrawerLayout;
 
@@ -148,11 +135,6 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
         // Get reference to the ROOM Database by creating a db instance
         mDb = AppDatabase.getInstance(getApplicationContext());
 
-//        // Access the accounts that are stored in the account manager
-//        AccountManager accountManager = (AccountManager) getApplicationContext().getSystemService(ACCOUNT_SERVICE);
-//        Account[] accounts = accountManager.getAccounts();
-//        Log.v("sync", accounts[0].toString());
-//        mAccount = accounts[0];
     }
 
     @Override
@@ -205,7 +187,5 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
             }
         });
     }
-
-    // Run the sync adapter
 
 }
