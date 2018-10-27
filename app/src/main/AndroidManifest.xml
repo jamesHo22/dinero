@@ -33,31 +33,6 @@
         </activity>
         <service android:name=".sync.CallServerIntentService" android:enabled="true"/>
 
-        <service android:name=".sync.SyncAdapter.AuthenticatorService" android:enabled="true">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
-            </intent-filter>
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator"/>
-        </service>
-
-        <provider
-            android:name="com.example.jamesho.dinero.sync.SyncAdapter.StubProvider"
-            android:authorities="com.example.jamesho.dinero.Database"
-            android:exported="false"
-            android:syncable="true"/>
-
-        <service
-            android:name=".sync.SyncAdapter.SyncService"
-            android:exported="true"
-            android:process=":sync">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
-            </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter"/>
-        </service>
     </application>
 
 </manifest>

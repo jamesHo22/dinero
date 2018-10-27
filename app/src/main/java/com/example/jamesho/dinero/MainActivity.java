@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
     private RecyclerView.LayoutManager mLayoutManager;
     private AppDatabase mDb;
     private Toast mToast;
-
     DrawerLayout mDrawerLayout;
 
     //TODO: (Completed) put a recycler view in here that loads cardViews.
@@ -49,10 +48,8 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
     //TODO: (Completed) Make an IntentService for database operations, JSON Parsing, Network Calling
     //TODO: Make Location Manager thing to trigger syncing service when phone moves
 
-
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         Toast.makeText(this, "Please sign out to return to previous page", Toast.LENGTH_SHORT).show();
     }
 
@@ -134,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.ItemA
 
         // Get reference to the ROOM Database by creating a db instance
         mDb = AppDatabase.getInstance(getApplicationContext());
-
     }
 
     @Override
